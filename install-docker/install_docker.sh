@@ -36,5 +36,11 @@ else
   echo "Sử dụng: sudo bash install_docker.sh Ubuntu hoặc sudo bash install_docker.sh CentOS"
   exit 1
 fi
-
+read -p "Bạn có muốn cài đặt Portainer không? (y/n): " choice
+if [ "$choice" = "y" ]; then
+  docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce:latest
+  echo "Đã cài đặt và chạy Portainer!"
+else
+  echo "Không cài đặt Portainer."
+fi
 exit 0
