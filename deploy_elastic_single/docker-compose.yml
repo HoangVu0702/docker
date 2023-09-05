@@ -110,11 +110,8 @@ services:
     ports:
       - ${KIBANA_PORT}:5601
     environment:
-      - SERVERNAME=kibana
-      - ELASTICSEARCH_HOSTS=https://his-minisoc-logs:9200
       - ELASTICSEARCH_USERNAME=kibana_system
       - ELASTICSEARCH_PASSWORD=${KIBANA_PASSWORD}
-      - ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES=config/certs/ca/ca.crt
     networks:
       - siem_net
    his-minisoc-logstash:
