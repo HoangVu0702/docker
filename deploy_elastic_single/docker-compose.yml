@@ -5,7 +5,7 @@ services:
     image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
     hostname: his-siem-setup
     volumes:
-      - $CERTS:/usr/share/elasticsearch/config/certs
+      - ${CERTS}:/usr/share/elasticsearch/config/certs
       - "/etc/localtime:/etc/localtime:ro"
     user: "0"
     command: >
@@ -29,11 +29,11 @@ services:
           "  - name: his-minisoc-logs\n"\
           "    dns:\n"\
           "      - his-minisoc-logs\n"\
-          "      - $DOMAIN_COLLECT_LOGS\n"\
+          "      - ${DOMAIN_COLLECT_LOGS}\n"\
           "    ip:\n"\
           "      - 127.0.0.1\n"\
-          "      - $IP_COLLECT_LOGS1\n"\
-          "      - $IP_COLLECT_LOGS2\n"\
+          "      - ${IP_COLLECT_LOGS1}\n"\
+          "      - ${IP_COLLECT_LOGS2}\n"\
           "  - name: his-minisoc-dashboard\n"\
           "    dns:\n"\
           "      - his-minisoc-dashboard\n"\
@@ -68,8 +68,8 @@ services:
     image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
     hostname: his-minisoc-logs
     volumes:
-      - $CERTS:/usr/share/elasticsearch/config/certs
-      - $DATA_ES:/usr/share/elasticsearch/data
+      - ${CERTS}:/usr/share/elasticsearch/config/certs
+      - ${DATA_ES}:/usr/share/elasticsearch/data
       - "/etc/localtime:/etc/localtime:ro"
     ports:
       - ${ES_PORT}:9200
@@ -103,9 +103,9 @@ services:
     image: docker.elastic.co/kibana/kibana:${STACK_VERSION}
     hostname: his-minisoc-dashboard
     volumes:
-      - $CERTS:/usr/share/kibana/config/certs
-      - $DATA_DASH:/usr/share/kibana/data
-      - $CONFIG_DASH:/usr/share/kibana/config
+      - ${CERTS}:/usr/share/kibana/config/certs
+      - ${DATA_DASH}:/usr/share/kibana/data
+      - ${CONFIG_DASH}:/usr/share/kibana/config
       - "/etc/localtime:/etc/localtime:ro"
     ports:
       - ${KIBANA_PORT}:5601
@@ -126,9 +126,9 @@ services:
         published: 51410
         protocol: udp
     volumes:
-      - $CONFIG_LOGSTASH/pipeline:/usr/share/logstash/pipeline
-      - $CONFIG_LOGSTASH/logstash.yml:/usr/share/logstash/config/logstash.yml
-      - $CONFIG_LOGSTASH/pipelines.yml:/usr/share/logstash/config/pipelines.yml
+      - ${CONFIG_LOGSTASH}/pipeline:/usr/share/logstash/pipeline
+      - ${CONFIG_LOGSTASH}/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - ${CONFIG_LOGSTASH}/pipelines.yml:/usr/share/logstash/config/pipelines.yml
       # - /root/logstash/logs/camera:/usr/share/logstash/logs/camera
       # - /root/logstash/logs/wifi:/usr/share/logstash/logs/wifi
       - "/etc/localtime:/etc/localtime:ro"
