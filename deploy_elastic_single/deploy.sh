@@ -4,11 +4,13 @@ echo "vm.max_map_count=262144" >> /etc/sysctl.conf
 STACK_VERSION="$1"
 ELASTIC_PASSWORD="$2"
 KIBANA_PASSWORD="$3"
+CLUSTER_NAME="$4"
 
 # Gán các giá trị vào tệp .env
 echo "STACK_VERSION=$STACK_VERSION" >> .env
 echo "ELASTIC_PASSWORD='$ELASTIC_PASSWORD'" >> .env
 echo "KIBANA_PASSWORD='$KIBANA_PASSWORD'" >> .env
+echo "CLUSTER_NAME='$CLUSTER_NAME'" >> .env
 
 
 docker pull docker.elastic.co/elasticsearch/elasticsearch:"$STACK_VERSION"
