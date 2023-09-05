@@ -6,6 +6,7 @@ services:
     hostname: his-siem-setup
     volumes:
       - $CERTS:/usr/share/elasticsearch/config/certs
+      - "/etc/localtime:/etc/localtime:ro"
     user: "0"
     command: >
       bash -c '
@@ -55,15 +56,16 @@ services:
     networks:
       - siem_net
 
-  his-logs:
+  his-minisoc-elasticsearch:
     depends_on:
       setup:
         condition: service_healthy
     image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
-    hostname: his-logs
+    hostname: his-minisoc-logs
     volumes:
       - $CERTS:/usr/share/elasticsearch/config/certs
       - $DATA_ES:/usr/share/elasticsearch/data
+      - "/etc/localtime:/etc/localtime:ro"
     ports:
       - ${ES_PORT}:9200
     environment:
@@ -92,12 +94,13 @@ services:
     networks:
       - siem_net
 
-  kibana:
+  his-minisoc-kibana:
     image: docker.elastic.co/kibana/kibana:${STACK_VERSION}
-    hostname: dude-dashboard
+    hostname: his-minisoc-dashboard
     volumes:
       - $CERTS:/usr/share/kibana/config/certs
       - $DATA_DASH:/usr/share/kibana/data
+      - "/etc/localtime:/etc/localtime:ro"
     ports:
       - ${KIBANA_PORT}:5601
     environment:
@@ -106,6 +109,34 @@ services:
       - ELASTICSEARCH_USERNAME=kibana_system
       - ELASTICSEARCH_PASSWORD=${KIBANA_PASSWORD}
       - ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES=config/certs/ca/ca.crt
+    networks:
+      - siem_net
+   his-minisoc-logstash:
+    image: docker.elastic.co/logstash/logstash:8.5.0
+    hostname: his-minisoc-logstash
+    restart: always
+    ports:
+      - target: 1433
+        published: 1433
+        protocol: udp
+      - target: 51410
+        published: 51410
+        protocol: udp
+    volumes:
+      - $CONFIG_LOGSTASH/pipeline:/usr/share/logstash/pipeline
+      - $CONFIG_LOGSTASH/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - $CONFIG_LOGSTASH/pipelines.yml:/usr/share/logstash/config/pipelines.yml
+      # - /root/logstash/logs/camera:/usr/share/logstash/logs/camera
+      # - /root/logstash/logs/wifi:/usr/share/logstash/logs/wifi
+      - "/etc/localtime:/etc/localtime:ro"
+
+    # extra_hosts:
+    #   - "fleet5.hissc.com.vn:10.202.28.5"
+    #   - "fleet7.hissc.com.vn:10.202.28.7"
+    #   - "root-siem5.hissc.com.vn:10.202.28.5"
+    #   - "root-siem7.hissc.com.vn:10.202.28.7"
+    deploy:
+        replicas: 1
     networks:
       - siem_net
 networks:
