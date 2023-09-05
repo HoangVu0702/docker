@@ -26,14 +26,19 @@ services:
           echo "Creating certs";
           echo -ne \
           "instances:\n"\
-          "  - name: his-logs\n"\
+          "  - name: his-minisoc-logs\n"\
           "    dns:\n"\
-          "      - his-logs\n"\
-          "      - siem.durocket.dev\n"\
+          "      - his-minisoc-logs\n"\
+          "      - $DOMAIN_COLLECT_LOGS\n"\
           "    ip:\n"\
           "      - 127.0.0.1\n"\
-          "      - 10.2.0.4\n"\
-          "      - 20.187.98.19\n"\
+          "      - $IP_COLLECT_LOGS1\n"\
+          "      - $IP_COLLECT_LOGS2\n"\
+          "  - name: his-minisoc-dashboard\n"\
+          "    dns:\n"\
+          "      - his-minisoc-dashboard\n"\
+          "    ip:\n"\
+          "      - 127.0.0.1\n"\
           > config/certs/instances.yml;
           bin/elasticsearch-certutil cert --silent --pem -out config/certs/certs.zip --in config/certs/instances.yml --ca-cert config/certs/ca/ca.crt --ca-key config/certs/ca/ca.key;
           unzip config/certs/certs.zip -d config/certs;
@@ -100,6 +105,7 @@ services:
     volumes:
       - $CERTS:/usr/share/kibana/config/certs
       - $DATA_DASH:/usr/share/kibana/data
+      - $CONFIG_DASH:/usr/share/kibana/config
       - "/etc/localtime:/etc/localtime:ro"
     ports:
       - ${KIBANA_PORT}:5601
@@ -129,12 +135,6 @@ services:
       # - /root/logstash/logs/camera:/usr/share/logstash/logs/camera
       # - /root/logstash/logs/wifi:/usr/share/logstash/logs/wifi
       - "/etc/localtime:/etc/localtime:ro"
-
-    # extra_hosts:
-    #   - "fleet5.hissc.com.vn:10.202.28.5"
-    #   - "fleet7.hissc.com.vn:10.202.28.7"
-    #   - "root-siem5.hissc.com.vn:10.202.28.5"
-    #   - "root-siem7.hissc.com.vn:10.202.28.7"
     deploy:
         replicas: 1
     networks:
