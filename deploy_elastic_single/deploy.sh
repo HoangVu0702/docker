@@ -35,7 +35,7 @@ docker pull docker.elastic.co/elasticsearch/elasticsearch:"$ELASTIC_VERSION"
 docker pull docker.elastic.co/kibana/kibana:"$ELASTIC_VERSION"
 
 # Deploy the Elasticsearch and Kibana stack using Docker Compose
-docker-compose up -d
+docker compose up -d
 
 # Check if the stack was deployed successfully
 if [ $? -eq 0 ]; then
