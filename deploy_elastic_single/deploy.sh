@@ -20,19 +20,14 @@ fi
 
 # Retrieve arguments from the command line
 STACK_VERSION="$1"
-ELASTIC_PASSWORD="$2"
-KIBANA_PASSWORD="$3"
-CLUSTER_NAME="$4"
-
-# Assign values to environment variables in the .env file for use with Docker Compose
-echo "STACK_VERSION=$STACK_VERSION" > .env
-echo "ELASTIC_PASSWORD='$ELASTIC_PASSWORD'" >> .env
-echo "KIBANA_PASSWORD='$KIBANA_PASSWORD'" >> .env
-echo "CLUSTER_NAME='$CLUSTER_NAME'" >> .env
 
 # Pull Elasticsearch and Kibana images from Docker Hub
-docker pull docker.elastic.co/elasticsearch/elasticsearch:"$ELASTIC_VERSION"
-docker pull docker.elastic.co/kibana/kibana:"$ELASTIC_VERSION"
+docker pull docker.elastic.co/elasticsearch/elasticsearch:"$STACK_VERSION"
+docker pull docker.elastic.co/kibana/kibana:"$STACK_VERSION"
+docker pull docker.elastic.co/logstash/logstash:"$STACK_VERSION"
+
+#Create Network
+docker network create siem_net
 
 # Deploy the Elasticsearch and Kibana stack using Docker Compose
 docker compose up -d
