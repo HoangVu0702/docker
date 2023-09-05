@@ -6,7 +6,7 @@ elasticsearch.hosts: [ "https://his-minisoc-logs:9200" ] #### edit http
 #xpack.security.enabled: true
 #elasticsearch.username: "kibana_system"
 #elasticsearch.password: "RMqYdTzGBIfNr9tDsE29"
-elasticsearch.ssl.certificateAuthorities: "/usr/share/kibana/config/certs/ca.crt"
+elasticsearch.ssl.certificateAuthorities: "/usr/share/kibana/config/certs/ca/ca.crt"
 elasticsearch.ssl.verificationMode: certificate
 
 server.ssl.certificate: "/usr/share/kibana/config/certs/his-minisoc-dashboard.crt"
@@ -29,7 +29,7 @@ monitoring.ui.container.logstash.enabled: true
 
 xpack.security.session.idleTimeout: "24h"
 xpack.security.session.lifespan: "3d"
-// xpack.actions.customHostSettings:
-//   - url: smtp://x.x.x.x
-//     smtp:
-//       ignoreTLS: true
+#xpack.actions.customHostSettings:
+#  - url: smtp://x.x.x.x
+#    smtp:
+#      ignoreTLS: true
