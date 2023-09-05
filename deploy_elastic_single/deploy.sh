@@ -21,13 +21,14 @@ sysctl -w vm.max_map_count=262144
 echo "vm.max_map_count=262144" >> /etc/sysctl.conf
 
 # Check if the script has enough arguments
-if [ "$#" -ne 4 ]; then
-  echo "Usage: $0 <elastic_version> <elastic_password> <kibana_password> <cluster_name>"
+if [ "$#" -ne 2 ]; then
+  echo "Usage: $0 <elastic_version> <stack_name>"
   exit 1
 fi
 
 # Retrieve arguments from the command line
 STACK_VERSION="$1"
+PROJECT_NAME="$2"
 
 # Pull Elasticsearch and Kibana images from Docker Hub
 docker pull docker.elastic.co/elasticsearch/elasticsearch:"$STACK_VERSION"
@@ -38,7 +39,7 @@ docker pull docker.elastic.co/logstash/logstash:"$STACK_VERSION"
 docker network create siem_net
 
 # Deploy the Elasticsearch and Kibana stack using Docker Compose
-docker compose up -d
+docker compose up -p $PROJECT_NAME -d
 
 # Check if the stack was deployed successfully
 if [ $? -eq 0 ]; then
