@@ -114,7 +114,7 @@ services:
       - ELASTICSEARCH_PASSWORD=${KIBANA_PASSWORD}
     networks:
       - siem_net
-   his-minisoc-logstash:
+  his-minisoc-logstash:
     image: docker.elastic.co/logstash/logstash:8.5.0
     hostname: his-minisoc-logstash
     restart: always
