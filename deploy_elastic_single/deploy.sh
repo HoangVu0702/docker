@@ -19,13 +19,13 @@ if [ "$#" -ne 4 ]; then
 fi
 
 # Retrieve arguments from the command line
-ELASTIC_VERSION="$1"
+STACK_VERSION="$1"
 ELASTIC_PASSWORD="$2"
 KIBANA_PASSWORD="$3"
 CLUSTER_NAME="$4"
 
 # Assign values to environment variables in the .env file for use with Docker Compose
-echo "ELASTIC_VERSION=$ELASTIC_VERSION" > .env
+echo "STACK_VERSION=$STACK_VERSION" > .env
 echo "ELASTIC_PASSWORD='$ELASTIC_PASSWORD'" >> .env
 echo "KIBANA_PASSWORD='$KIBANA_PASSWORD'" >> .env
 echo "CLUSTER_NAME='$CLUSTER_NAME'" >> .env
