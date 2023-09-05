@@ -48,7 +48,6 @@ docker network create siem_net
 
 # Deploy the Elasticsearch and Kibana stack using Docker Compose
 docker compose -p "$PROJECT_NAME" up -d
-
 # Check if the stack was deployed successfully
 if [ $? -eq 0 ]; then
   echo "The Elasticsearch and Kibana stack has been deployed and is running."
