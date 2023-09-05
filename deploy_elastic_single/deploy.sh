@@ -8,6 +8,8 @@ fi
 
 #Create file store data and config
 mkdir es_data certs kib_data logstash_config kib_config
+cp config/kibana/* kib_config
+cp config/logstash/* logstash_config
 chmod 777 -R *
 
 # Configure kernel parameters for Elasticsearch
