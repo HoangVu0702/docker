@@ -1,0 +1,33 @@
+#env.TZ: Asia/Ho_Chi_Minh
+http.host: "0.0.0.0"
+node.name: his-minisoc-logstash
+xpack.monitoring.enabled: true
+xpack.monitoring.elasticsearch.username: 'logstash_system'
+xpack.monitoring.elasticsearch.password: 'P@ssw0rd'
+xpack.monitoring.elasticsearch.hosts: [ "http://210.2.77.20:9220" ]
+#config.reload.automatic: true
+#config.reload.interval: 3s
+
+xpack.management.enabled: true
+xpack.management.elasticsearch.hosts: ["http://210.2.77.20:9220"]
+xpack.management.elasticsearch.username: logstash_admin
+xpack.management.elasticsearch.password: P@ssL0gStash$$$
+xpack.management.logstash.poll_interval: 5s
+xpack.management.pipeline.id: ["hissc-access-finger","hissc-access-face","hissc-wifi","hissc-camera"]
+
+#pipeline:
+#  batch:
+#    size: 2000
+#    delay: 50
+#pipeline.ecs_compatibility: disabled
+
+#path.data: /var/lib/logstash
+#path.logs: /var/log/logstash
+
+##### PERSITENT QUEUE
+#queue.type: persisted
+#path.queue: /etc/logstash/queue
+#queue.max_events: 100000000
+#queue.max_bytes: 60g
+#queue.checkpoint.acks: 0
+#queue.checkpoint.writes: 0
