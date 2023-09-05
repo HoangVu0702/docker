@@ -14,6 +14,12 @@ cp config/logstash/* logstash_config
 cp config/logstash/example.conf logstash_config/pipeline
 chmod 777 -R *
 
+echo "DATA_ES=$(pwd)/es_data" >> .env
+echo "CERTS=$(pwd)/certs" >> .env
+echo "DATA_DASH=$(pwd)/kib_data" >> .env
+echo "CONFIG_LOGSTASH=$(pwd)/logstash_config" >> .env
+echo "CONFIG_DASH=$(pwd)/kib_config" >> .env
+
 # Configure kernel parameters for Elasticsearch
 sysctl -w vm.max_map_count=262144
 
