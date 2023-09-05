@@ -5,7 +5,7 @@ STACK_VERSION="$1"
 ELASTIC_PASSWORD="$2"
 
 # Gán các giá trị vào tệp .env
-echo "STACK_VERSION=$STACK_VERSION" > .env
+echo "STACK_VERSION=$STACK_VERSION" >> .env
 echo "ELASTIC_PASSWORD=$ELASTIC_PASSWORD" >> .env
 
 docker pull docker.elastic.co/elasticsearch/elasticsearch:"$STACK_VERSION"
