@@ -6,6 +6,10 @@ if [ "$EUID" -ne 0 ]; then
   exit 1
 fi
 
+#Create file store data and config
+mkdir es_data certs kib_data logstash_config
+chmod 777 -R *
+
 # Configure kernel parameters for Elasticsearch
 sysctl -w vm.max_map_count=262144
 
