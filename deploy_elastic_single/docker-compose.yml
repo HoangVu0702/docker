@@ -3,9 +3,9 @@ version: "3.7"
 services:
   setup:
     image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
-    hostname: dude-siem-setup
+    hostname: his-siem-setup
     volumes:
-      - certs:/usr/share/elasticsearch/config/certs
+      - $CERTS:/usr/share/elasticsearch/config/certs
     user: "0"
     command: >
       bash -c '
@@ -52,6 +52,8 @@ services:
       interval: 1s
       timeout: 5s
       retries: 120
+    networks:
+      - siem_net
 
   his-logs:
     depends_on:
@@ -60,8 +62,8 @@ services:
     image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
     hostname: his-logs
     volumes:
-      - certs:/usr/share/elasticsearch/config/certs
-      - esdata01:/usr/share/elasticsearch/data
+      - $CERTS:/usr/share/elasticsearch/config/certs
+      - $DATA_ES:/usr/share/elasticsearch/data
     ports:
       - ${ES_PORT}:9200
     environment:
@@ -87,13 +89,15 @@ services:
       memlock:
         soft: -1
         hard: -1
+    networks:
+      - siem_net
 
   kibana:
     image: docker.elastic.co/kibana/kibana:${STACK_VERSION}
     hostname: dude-dashboard
     volumes:
-      - certs:/usr/share/kibana/config/certs
-      - kibanadata:/usr/share/kibana/data
+      - $CERTS:/usr/share/kibana/config/certs
+      - $DATA_DASH:/usr/share/kibana/data
     ports:
       - ${KIBANA_PORT}:5601
     environment:
@@ -102,10 +106,8 @@ services:
       - ELASTICSEARCH_USERNAME=kibana_system
       - ELASTICSEARCH_PASSWORD=${KIBANA_PASSWORD}
       - ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES=config/certs/ca/ca.crt
-volumes:
-  certs:
-    driver: local
-  esdata01:
-    driver: local
-  kibanadata:
-    driver: local
+    networks:
+      - siem_net
+networks:
+  siem_net:
+    external: true
