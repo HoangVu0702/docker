@@ -30,6 +30,8 @@ fi
 STACK_VERSION="$1"
 PROJECT_NAME="$2"
 
+echo "STACK_VERSION=$STACK_VERSION" >> .env
+
 # Pull Elasticsearch and Kibana images from Docker Hub
 docker pull docker.elastic.co/elasticsearch/elasticsearch:"$STACK_VERSION"
 docker pull docker.elastic.co/kibana/kibana:"$STACK_VERSION"
