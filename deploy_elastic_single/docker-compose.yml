@@ -26,17 +26,17 @@ services:
           echo "Creating certs";
           echo -ne \
           "instances:\n"\
-          "  - name: his-minisoc-logs\n"\
+          "  - name: his-cybersoc-logs\n"\
           "    dns:\n"\
-          "      - his-minisoc-logs\n"\
+          "      - his-cybersoc-logs\n"\
           "      - ${DOMAIN_COLLECT_LOGS}\n"\
           "    ip:\n"\
           "      - 127.0.0.1\n"\
           "      - ${IP_COLLECT_LOGS1}\n"\
           "      - ${IP_COLLECT_LOGS2}\n"\
-          "  - name: his-minisoc-dashboard\n"\
+          "  - name: his-cybersoc-dashboard\n"\
           "    dns:\n"\
-          "      - his-minisoc-dashboard\n"\
+          "      - his-cybersoc-dashboard\n"\
           "    ip:\n"\
           "      - 127.0.0.1\n"\
           > config/certs/instances.yml;
@@ -48,9 +48,9 @@ services:
         find . -type d -exec chmod 750 \{\} \;;
         find . -type f -exec chmod 640 \{\} \;;
         echo "Waiting for Elasticsearch availability";
-        until curl -s --cacert config/certs/ca/ca.crt https://his-minisoc-logs:9200 | grep -q "missing authentication credentials"; do sleep 30; done;
+        until curl -s --cacert config/certs/ca/ca.crt https://his-cybersoc-logs:9200 | grep -q "missing authentication credentials"; do sleep 30; done;
         echo "Setting kibana_system password";
-        until curl -s -X POST --cacert config/certs/ca/ca.crt -u "elastic:${ELASTIC_PASSWORD}" -H "Content-Type: application/json" https://his-minisoc-logs:9200/_security/user/kibana_system/_password -d "{\"password\":\"${KIBANA_PASSWORD}\"}" | grep -q "^{}"; do sleep 10; done;
+        until curl -s -X POST --cacert config/certs/ca/ca.crt -u "elastic:${ELASTIC_PASSWORD}" -H "Content-Type: application/json" https://his-cybersoc-logs:9200/_security/user/kibana_system/_password -d "{\"password\":\"${KIBANA_PASSWORD}\"}" | grep -q "^{}"; do sleep 10; done;
         echo "All done!";
       '
     healthcheck:
@@ -61,9 +61,9 @@ services:
     networks:
       - siem_net
 
-  his-minisoc-elasticsearch:
+  logs:
     image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
-    hostname: his-minisoc-logs
+    hostname: his-cybersoc-logs
     volumes:
       - ${CERTS}:/usr/share/elasticsearch/config/certs
       - ${DATA_ES}:/usr/share/elasticsearch/data
@@ -79,12 +79,12 @@ services:
       - bootstrap.memory_lock=true
       - xpack.security.enabled=true
       - xpack.security.http.ssl.enabled=true
-      - xpack.security.http.ssl.key=certs/his-minisoc-logs/his-minisoc-logs.key
-      - xpack.security.http.ssl.certificate=certs/his-minisoc-logs/his-minisoc-logs.crt
+      - xpack.security.http.ssl.key=certs/his-cybersoc-logs/his-cybersoc-logs.key
+      - xpack.security.http.ssl.certificate=certs/his-cybersoc-logs/his-cybersoc-logs.crt
       - xpack.security.http.ssl.certificate_authorities=certs/ca/ca.crt
       - xpack.security.transport.ssl.enabled=true
-      - xpack.security.transport.ssl.key=certs/his-minisoc-logs/his-minisoc-logs.key
-      - xpack.security.transport.ssl.certificate=certs/his-minisoc-logs/his-minisoc-logs.crt
+      - xpack.security.transport.ssl.key=certs/his-cybersoc-logs/his-cybersoc-logs.key
+      - xpack.security.transport.ssl.certificate=certs/his-cybersoc-logs/his-cybersoc-logs.crt
       - xpack.security.transport.ssl.certificate_authorities=certs/ca/ca.crt
       - xpack.security.transport.ssl.verification_mode=certificate
       #- xpack.license.self_generated.type=${LICENSE}
@@ -96,11 +96,11 @@ services:
     networks:
       - siem_net
 
-  his-minisoc-kibana:
+  kibana:
     image: docker.elastic.co/kibana/kibana:${STACK_VERSION}
-    hostname: his-minisoc-dashboard
+    hostname: his-cybersoc-dashboard
     volumes:
-      - ${CERTS}/his-minisoc-dashboard:/usr/share/kibana/config/certs
+      - ${CERTS}/his-cybersoc-dashboard:/usr/share/kibana/config/certs
       - ${CERTS}/ca:/usr/share/kibana/config/certs/ca
       - ${DATA_DASH}:/usr/share/kibana/data
       - ${CONFIG_DASH}:/usr/share/kibana/config
@@ -112,9 +112,9 @@ services:
       - ELASTICSEARCH_PASSWORD=${KIBANA_PASSWORD}
     networks:
       - siem_net
-  his-minisoc-logstash:
+  logstash:
     image: docker.elastic.co/logstash/logstash:8.5.0
-    hostname: his-minisoc-logstash
+    hostname: his-cybersoc-logstash
     restart: always
     ports:
       - target: 1433
