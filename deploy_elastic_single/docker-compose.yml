@@ -78,6 +78,17 @@ services:
       - cluster.initial_master_nodes=his-cybersoc-logs
       #- discovery.seed_hosts=""
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=true
+      - xpack.security.http.ssl.enabled=true
+      - xpack.security.http.ssl.key=/usr/share/elasticsearch/config/certs/his-cybersoc-logs.key
+      - xpack.security.http.ssl.certificate=/usr/share/elasticsearch/config/certs/his-cybersoc-logs.crt
+      - xpack.security.http.ssl.certificate_authorities=/usr/share/elasticsearch/config/certs/ca/ca.crt
+      - xpack.security.transport.ssl.enabled=true
+      - xpack.security.transport.ssl.key=/usr/share/elasticsearch/config/certs/his-cybersoc-logs.key
+      - xpack.security.transport.ssl.certificate=/usr/share/elasticsearch/config/certs/his-cybersoc-logs.crt
+      - xpack.security.transport.ssl.certificate_authorities=/usr/share/elasticsearch/config/certs/ca/ca.crt
+      - xpack.security.transport.ssl.verification_mode=certificate
       #- ES_JAVA_OPTS=${ES_JAVA_OPTS_ES}
     ulimits:
       memlock:
