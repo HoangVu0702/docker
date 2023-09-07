@@ -34,13 +34,13 @@ echo "vm.max_map_count=262144" >> /etc/sysctl.conf
 
 # Check if the script has enough arguments
 if [ "$#" -ne 2 ]; then
-  echo "Usage: $0 <elastic_version> <stack_name>"
+  echo "Usage: $0 <elastic_version>"
   exit 1
 fi
 
 # Retrieve arguments from the command line
 STACK_VERSION="$1"
-PROJECT_NAME="$2"
+#PROJECT_NAME="$2"
 
 echo "STACK_VERSION=$STACK_VERSION" >> .env
 
