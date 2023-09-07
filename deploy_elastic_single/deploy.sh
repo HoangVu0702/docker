@@ -7,7 +7,8 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 # Install package need
-apt install unzip
+apt install python3-pip
+pip install python-dotenv requests json 
 
 #Create file store data and config
 mkdir his-cybersoc-logs-data his-cybersoc-logs-config certs his-cybersoc-kibana-data his-cybersoc-logstash-config his-cybersoc-kibana-config
@@ -80,7 +81,8 @@ docker rm -f es-example
 docker network create siem_net
 
 # Deploy the Elasticsearch and Kibana stack using Docker Compose
-docker compose -p "$PROJECT_NAME" up -d
+#docker compose -p "$PROJECT_NAME" up -d
+python3 create_stack.py
 # Check if the stack was deployed successfully
 if [ $? -eq 0 ]; then
   echo "The Elasticsearch and Kibana stack has been deployed and is running."
