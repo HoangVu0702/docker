@@ -68,7 +68,7 @@ services:
     volumes:
       - ${CERTS}:/usr/share/elasticsearch/config/certs
       - ${DATA_ES}:/usr/share/elasticsearch/data
-      - ${CONFIG_ES}/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ${CONFIG_ES}:/usr/share/elasticsearch/config
       - "/etc/localtime:/etc/localtime:ro"
     ports:
       - ${ES_PORT}:9200
