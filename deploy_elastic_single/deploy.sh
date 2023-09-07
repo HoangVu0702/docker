@@ -14,7 +14,7 @@ mkdir his-cybersoc-logs-data his-cybersoc-logs-config certs his-cybersoc-kibana-
 mkdir his-cybersoc-logstash-config/pipeline
 cp config/kibana/* his-cybersoc-kibana-config
 cp config/logstash/* his-cybersoc-logstash-config
-unzip config/elasticsearch/his-cybersoc-logs-config.zip
+#unzip config/elasticsearch/his-cybersoc-logs-config.zip
 cp config/logstash/example.conf his-cybersoc-logstash-config/pipeline
 chmod 777 -R *
 
@@ -48,7 +48,35 @@ docker pull docker.elastic.co/elasticsearch/elasticsearch:"$STACK_VERSION"
 docker pull docker.elastic.co/kibana/kibana:"$STACK_VERSION"
 docker pull docker.elastic.co/logstash/logstash:"$STACK_VERSION"
 
-#Create Network
+# Create folder config for Elasticsearch
+docker run --name es-example -d -it docker.elastic.co/elasticsearch/elasticsearch:"$STACK_VERSION"
+docker cp es-example:/usr/share/elasticsearch/config his-cybersoc-logs-config
+#mv his-cybersoc-logs-config/config/* his-cybersoc-logs-config
+echo "
+cluster.name: "mini_soc-cluster"
+network.host: his-cybersoc-logs
+node.name: his-cybersoc-logs
+
+bootstrap.memory_lock: true
+
+xpack.monitoring.collection.enabled: true
+ingest.geoip.downloader.enabled: true
+
+xpack.security.enrollment.enabled: true
+xpack.security.enabled: true
+xpack.security.http.ssl.enabled: true
+xpack.security.transport.ssl.enabled: true
+xpack.security.http.ssl.key: /usr/share/elasticsearch/config/certs/his-cybersoc-logs.key
+xpack.security.http.ssl.certificate: /usr/share/elasticsearch/config/certs/his-cybersoc-logs.crt
+xpack.security.http.ssl.certificate_authorities: /usr/share/elasticsearch/config/certs/ca/ca.crt
+
+xpack.security.transport.ssl.key: /usr/share/elasticsearch/config/certs/his-cybersoc-logs.key
+xpack.security.transport.ssl.certificate: /usr/share/elasticsearch/config/certs/his-cybersoc-logs.crt
+xpack.security.transport.ssl.certificate_authorities: /usr/share/elasticsearch/config/certs/ca/ca.crt
+" > his-cybersoc-logs-config/config/elasticsearch.yml
+docker rm -f es-example
+
+# Create Network
 docker network create siem_net
 
 # Deploy the Elasticsearch and Kibana stack using Docker Compose
