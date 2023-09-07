@@ -17,7 +17,7 @@ fi
 
 # Install package need
 apt install python3-pip
-pip3 install python-dotenv requests json 
+pip3 install python-dotenv requests
 
 #Create file store data and config
 mkdir his-cybersoc-logs-data his-cybersoc-logs-config certs his-cybersoc-kibana-data his-cybersoc-logstash-config his-cybersoc-kibana-config
@@ -94,13 +94,13 @@ echo "--------------------------------------------------------------------------
 #docker compose -p "$PROJECT_NAME" up -d
 cat << "EOF"
 
-██████   ██████  ██████  ████████  █████  ██ ███    ██ ███████ ██████  
-██   ██ ██    ██ ██   ██    ██    ██   ██ ██ ████   ██ ██      ██   ██ 
-██████  ██    ██ ██████     ██    ███████ ██ ██ ██  ██ █████   ██████  
-██      ██    ██ ██   ██    ██    ██   ██ ██ ██  ██ ██ ██      ██   ██ 
-██       ██████  ██   ██    ██    ██   ██ ██ ██   ████ ███████ ██   ██ 
-                                                                       
-                                                                       
+██████╗  ██████╗ ██████╗ ████████╗ █████╗ ██╗███╗   ██╗███████╗██████╗ 
+██╔══██╗██╔═══██╗██╔══██╗╚══██╔══╝██╔══██╗██║████╗  ██║██╔════╝██╔══██╗
+██████╔╝██║   ██║██████╔╝   ██║   ███████║██║██╔██╗ ██║█████╗  ██████╔╝
+██╔═══╝ ██║   ██║██╔══██╗   ██║   ██╔══██║██║██║╚██╗██║██╔══╝  ██╔══██╗
+██║     ╚██████╔╝██║  ██║   ██║   ██║  ██║██║██║ ╚████║███████╗██║  ██║
+╚═╝      ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝
+                                                                                                                                  
 EOF
 python3 create_stack.py
 # Check if the stack was deployed successfully
