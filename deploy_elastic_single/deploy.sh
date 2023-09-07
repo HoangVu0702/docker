@@ -7,18 +7,18 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 #Create file store data and config
-mkdir es_data certs kib_data logstash_config kib_config
-mkdir logstash_config/pipeline
-cp config/kibana/* kib_config
-cp config/logstash/* logstash_config
-cp config/logstash/example.conf logstash_config/pipeline
+mkdir his-cybersoc-logs-data certs his-cybersoc-kibana-data his-cybersoc-logstash-config his-cybersoc-kibana-config
+mkdir his-cybersoc-logstash-config/pipeline
+cp config/kibana/* his-cybersoc-kibana-config
+cp config/logstash/* his-cybersoc-logstash-config
+cp config/logstash/example.conf his-cybersoc-logstash-config/pipeline
 chmod 777 -R *
 
-echo "DATA_ES=$(pwd)/es_data" >> .env
+echo "DATA_ES=$(pwd)/his-cybersoc-logs-data" >> .env
 echo "CERTS=$(pwd)/certs" >> .env
-echo "DATA_DASH=$(pwd)/kib_data" >> .env
-echo "CONFIG_LOGSTASH=$(pwd)/logstash_config" >> .env
-echo "CONFIG_DASH=$(pwd)/kib_config" >> .env
+echo "DATA_DASH=$(pwd)/his-cybersoc-kibana-data" >> .env
+echo "CONFIG_LOGSTASH=$(pwd)/his-cybersoc-logstash-config" >> .env
+echo "CONFIG_DASH=$(pwd)/his-cybersoc-kibana-config" >> .env
 
 # Configure kernel parameters for Elasticsearch
 sysctl -w vm.max_map_count=262144
