@@ -84,7 +84,7 @@ stack_create_endpoint = '/stacks/create/standalone/file'
 # auth_token = 'your_jwt_token_here'
 
 # Replace with the name of your stack
-stack_name = 'ElasticStack'
+stack_name = 'his-cybersoc'
 
 # Replace with the environment ID where you want to deploy the stack
 # local_environment_id = 123  # Replace with the actual environment ID
