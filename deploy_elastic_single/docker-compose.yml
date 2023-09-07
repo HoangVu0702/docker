@@ -3,7 +3,7 @@ version: "3.7"
 services:
   setup:
     image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
-    hostname: his-siem-setup
+    hostname: his-cybersoc-setup
     volumes:
       - ${CERTS}:/usr/share/elasticsearch/config/certs
       - "/etc/localtime:/etc/localtime:ro"
