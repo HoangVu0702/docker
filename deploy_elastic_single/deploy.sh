@@ -33,7 +33,7 @@ sysctl -w vm.max_map_count=262144
 echo "vm.max_map_count=262144" >> /etc/sysctl.conf
 
 # Check if the script has enough arguments
-if [ "$#" -ne 2 ]; then
+if [ "$#" -ne 1 ]; then
   echo "Usage: $0 <elastic_version>"
   exit 1
 fi
