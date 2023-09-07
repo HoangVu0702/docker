@@ -6,14 +6,14 @@ from dotenv import load_dotenv
 
 # %%
 # Portainer API base URL
-base_url = 'https://192.168.1.3:9443/api'
+base_url = 'https://104.208.112.56:9443/api'
 
 # Authentication endpoint
 auth_endpoint = '/auth'
 
 # Replace with your Portainer username and password
 username = 'admin'
-password = 'leminh123456'
+password = 'Test@2020###'
 
 # Create a session
 session = requests.Session()
