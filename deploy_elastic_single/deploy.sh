@@ -14,15 +14,17 @@ if [ "$EUID" -ne 0 ]; then
   echo "Please run this script as root or with equivalent privileges."
   exit 1
 fi
-
+echo "---------------------------------------------------------------------------------------------------------------------"
+echo "                                        Installing package need"
+echo "---------------------------------------------------------------------------------------------------------------------"
 # Install package need
-echo "Installing package need......."
 apt install python3-pip
 pip3 install python-dotenv requests
-echo "---------------------------------------------------------------------------------------------------------------------"
-echo "---------------------------------------------------------------------------------------------------------------------"
+
 #Create file store data and config
-echo "Create file store data and config"
+echo "---------------------------------------------------------------------------------------------------------------------"
+echo "                                        Create file store data and config"
+echo "---------------------------------------------------------------------------------------------------------------------"
 mkdir his-cybersoc-logs-data his-cybersoc-logs-config certs his-cybersoc-kibana-data his-cybersoc-logstash-config his-cybersoc-kibana-config
 mkdir his-cybersoc-logstash-config/pipeline
 cp config/kibana/* his-cybersoc-kibana-config
@@ -30,8 +32,7 @@ cp config/logstash/* his-cybersoc-logstash-config
 #unzip config/elasticsearch/his-cybersoc-logs-config.zip
 cp config/logstash/example.conf his-cybersoc-logstash-config/pipeline
 chmod 777 -R *
-echo "---------------------------------------------------------------------------------------------------------------------"
-echo "---------------------------------------------------------------------------------------------------------------------"
+
 echo "DATA_ES=$(pwd)/his-cybersoc-logs-data" >> .env
 echo "CERTS=$(pwd)/certs" >> .env
 echo "DATA_DASH=$(pwd)/his-cybersoc-kibana-data" >> .env
@@ -39,7 +40,9 @@ echo "CONFIG_LOGSTASH=$(pwd)/his-cybersoc-logstash-config" >> .env
 echo "CONFIG_DASH=$(pwd)/his-cybersoc-kibana-config" >> .env
 echo "CONFIG_ES=$(pwd)/his-cybersoc-logs-config" >> .env
 
-echo "Configure kernel parameters for Elasticsearch"
+echo "---------------------------------------------------------------------------------------------------------------------"
+echo "                                        Configure kernel parameters for Elasticsearch"
+echo "---------------------------------------------------------------------------------------------------------------------"
 # Configure kernel parameters for Elasticsearch
 sysctl -w vm.max_map_count=262144
 
@@ -59,12 +62,14 @@ STACK_VERSION="$1"
 
 echo "STACK_VERSION=$STACK_VERSION" >> .env
 echo "---------------------------------------------------------------------------------------------------------------------"
+echo "                                        Pull images"
 echo "---------------------------------------------------------------------------------------------------------------------"
 # Pull Elasticsearch and Kibana images from Docker Hub
 docker pull docker.elastic.co/elasticsearch/elasticsearch:"$STACK_VERSION"
 docker pull docker.elastic.co/kibana/kibana:"$STACK_VERSION"
 docker pull docker.elastic.co/logstash/logstash:"$STACK_VERSION"
 echo "---------------------------------------------------------------------------------------------------------------------"
+echo "                                        Create folder config for Elasticsearch"
 echo "---------------------------------------------------------------------------------------------------------------------"
 # Create folder config for Elasticsearch
 docker run --name es-example -d -it docker.elastic.co/elasticsearch/elasticsearch:"$STACK_VERSION"
@@ -96,8 +101,6 @@ docker rm -f es-example
 
 # Create Network
 docker network create siem_net
-
-echo "---------------------------------------------------------------------------------------------------------------------"
 echo "---------------------------------------------------------------------------------------------------------------------"
 # Deploy the Elasticsearch and Kibana stack using Docker Compose
 #docker compose -p "$PROJECT_NAME" up -d
@@ -112,6 +115,7 @@ cat << "EOF"
                                                                                                                                   
 EOF
 echo "---------------------------------------------------------------------------------------------------------------------"
+echo "                                        Create Portainer Stack"
 echo "---------------------------------------------------------------------------------------------------------------------"
 python3 create_stack.py
 # Check if the stack was deployed successfully
