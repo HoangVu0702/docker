@@ -14,8 +14,7 @@ mkdir his-cybersoc-logs-data his-cybersoc-logs-config certs his-cybersoc-kibana-
 mkdir his-cybersoc-logstash-config/pipeline
 cp config/kibana/* his-cybersoc-kibana-config
 cp config/logstash/* his-cybersoc-logstash-config
-cd config/elasticsearch unzip his-cybersoc-logs-config.zip
-cp config/elasticsearch his-cybersoc-logs-config
+unzip config/elasticsearch/his-cybersoc-logs-config.zip -d his-cybersoc-logs-config
 cp config/logstash/example.conf his-cybersoc-logstash-config/pipeline
 chmod 777 -R *
 
