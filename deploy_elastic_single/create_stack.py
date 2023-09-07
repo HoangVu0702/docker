@@ -2,6 +2,7 @@
 import os
 import json
 import requests
+import getpass
 from dotenv import load_dotenv
 
 # %%
@@ -16,7 +17,7 @@ auth_endpoint = '/auth'
 
 # Replace with your Portainer username and password
 username = 'admin'
-password = input("Input Pasword: ")
+password = getpass.getpass("Input Password: ")
 
 # Create a session
 session = requests.Session()
