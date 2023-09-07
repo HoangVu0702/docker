@@ -66,15 +66,16 @@ services:
     hostname: his-cybersoc-logs
     restart: always
     volumes:
-      - ${CERTS}:/usr/share/elasticsearch/config/certs
+      - ${CERTS}/his-cybersoc-logs:/usr/share/elasticsearch/config/certs
+      - ${CERTS}/ca:/usr/share/elasticsearch/config/certs/ca
       - ${DATA_ES}:/usr/share/elasticsearch/data
-      - ${CONFIG_ES}:/usr/share/elasticsearch/config
+      - ${CONFIG_ES}/config:/usr/share/elasticsearch/config
       - "/etc/localtime:/etc/localtime:ro"
     ports:
       - ${ES_PORT}:9200
     environment:
-      - node.name=his-logs
-      - cluster.initial_master_nodes=his-logs
+      - node.name=his-cybersoc-logs
+      - cluster.initial_master_nodes=his-cybersoc-logs
       #- discovery.seed_hosts=""
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
       #- ES_JAVA_OPTS=${ES_JAVA_OPTS_ES}
