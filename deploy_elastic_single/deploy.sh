@@ -8,7 +8,7 @@ fi
 
 # Install package need
 apt install python3-pip
-pip install python-dotenv requests json 
+pip3 install python-dotenv requests json 
 
 #Create file store data and config
 mkdir his-cybersoc-logs-data his-cybersoc-logs-config certs his-cybersoc-kibana-data his-cybersoc-logstash-config his-cybersoc-kibana-config
