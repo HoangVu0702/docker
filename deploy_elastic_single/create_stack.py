@@ -6,14 +6,17 @@ from dotenv import load_dotenv
 
 # %%
 # Portainer API base URL
-base_url = 'https://104.208.112.56:9443/api'
+
+input_ip = input("Input IP Portainer: ")
+
+base_url = f'https://{input_ip}:9443/api'
 
 # Authentication endpoint
 auth_endpoint = '/auth'
 
 # Replace with your Portainer username and password
 username = 'admin'
-password = 'Test@2020###'
+password = input("Input Pasword: ")
 
 # Create a session
 session = requests.Session()
@@ -23,6 +26,9 @@ auth_payload = {
     "Username": username,
     "Password": password
 }
+
+# Replace with the name of your stack
+stack_name = input("Input Stack Name: ")
 
 # %%
 # Make the POST request to authenticate
@@ -84,7 +90,7 @@ stack_create_endpoint = '/stacks/create/standalone/file'
 # auth_token = 'your_jwt_token_here'
 
 # Replace with the name of your stack
-stack_name = 'his-cybersoc'
+# stack_name = 'ElasticStack'
 
 # Replace with the environment ID where you want to deploy the stack
 # local_environment_id = 123  # Replace with the actual environment ID
@@ -170,5 +176,3 @@ if response.status_code == 200:
 else:
     print(f"Failed to deploy the stack with status code: {response.status_code}")
     print(response.json())  # Print the response content for debugging
-
-
