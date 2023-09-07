@@ -64,6 +64,7 @@ services:
   logs:
     image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
     hostname: his-cybersoc-logs
+    restart: always
     volumes:
       - ${CERTS}:/usr/share/elasticsearch/config/certs
       - ${DATA_ES}:/usr/share/elasticsearch/data
@@ -87,6 +88,7 @@ services:
   kibana:
     image: docker.elastic.co/kibana/kibana:${STACK_VERSION}
     hostname: his-cybersoc-dashboard
+    restart: always
     volumes:
       - ${CERTS}/his-cybersoc-dashboard:/usr/share/kibana/config/certs
       - ${CERTS}/ca:/usr/share/kibana/config/certs/ca
