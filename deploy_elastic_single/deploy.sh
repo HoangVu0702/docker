@@ -16,10 +16,13 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 # Install package need
+echo "Installing package need......."
 apt install python3-pip
 pip3 install python-dotenv requests
-
+echo "---------------------------------------------------------------------------------------------------------------------"
+echo "---------------------------------------------------------------------------------------------------------------------"
 #Create file store data and config
+echo "Create file store data and config"
 mkdir his-cybersoc-logs-data his-cybersoc-logs-config certs his-cybersoc-kibana-data his-cybersoc-logstash-config his-cybersoc-kibana-config
 mkdir his-cybersoc-logstash-config/pipeline
 cp config/kibana/* his-cybersoc-kibana-config
@@ -27,7 +30,8 @@ cp config/logstash/* his-cybersoc-logstash-config
 #unzip config/elasticsearch/his-cybersoc-logs-config.zip
 cp config/logstash/example.conf his-cybersoc-logstash-config/pipeline
 chmod 777 -R *
-
+echo "---------------------------------------------------------------------------------------------------------------------"
+echo "---------------------------------------------------------------------------------------------------------------------"
 echo "DATA_ES=$(pwd)/his-cybersoc-logs-data" >> .env
 echo "CERTS=$(pwd)/certs" >> .env
 echo "DATA_DASH=$(pwd)/his-cybersoc-kibana-data" >> .env
@@ -35,12 +39,14 @@ echo "CONFIG_LOGSTASH=$(pwd)/his-cybersoc-logstash-config" >> .env
 echo "CONFIG_DASH=$(pwd)/his-cybersoc-kibana-config" >> .env
 echo "CONFIG_ES=$(pwd)/his-cybersoc-logs-config" >> .env
 
+echo "Configure kernel parameters for Elasticsearch"
 # Configure kernel parameters for Elasticsearch
 sysctl -w vm.max_map_count=262144
 
 # Save the configuration to /etc/sysctl.conf to apply it automatically on startup
 echo "vm.max_map_count=262144" >> /etc/sysctl.conf
-
+echo "---------------------------------------------------------------------------------------------------------------------"
+echo "---------------------------------------------------------------------------------------------------------------------"
 # Check if the script has enough arguments
 if [ "$#" -ne 1 ]; then
   echo "Usage: $0 <elastic_version>"
@@ -52,12 +58,14 @@ STACK_VERSION="$1"
 #PROJECT_NAME="$2"
 
 echo "STACK_VERSION=$STACK_VERSION" >> .env
-
+echo "---------------------------------------------------------------------------------------------------------------------"
+echo "---------------------------------------------------------------------------------------------------------------------"
 # Pull Elasticsearch and Kibana images from Docker Hub
 docker pull docker.elastic.co/elasticsearch/elasticsearch:"$STACK_VERSION"
 docker pull docker.elastic.co/kibana/kibana:"$STACK_VERSION"
 docker pull docker.elastic.co/logstash/logstash:"$STACK_VERSION"
-
+echo "---------------------------------------------------------------------------------------------------------------------"
+echo "---------------------------------------------------------------------------------------------------------------------"
 # Create folder config for Elasticsearch
 docker run --name es-example -d -it docker.elastic.co/elasticsearch/elasticsearch:"$STACK_VERSION"
 docker cp es-example:/usr/share/elasticsearch/config his-cybersoc-logs-config
@@ -90,6 +98,7 @@ docker rm -f es-example
 docker network create siem_net
 
 echo "---------------------------------------------------------------------------------------------------------------------"
+echo "---------------------------------------------------------------------------------------------------------------------"
 # Deploy the Elasticsearch and Kibana stack using Docker Compose
 #docker compose -p "$PROJECT_NAME" up -d
 cat << "EOF"
@@ -102,6 +111,8 @@ cat << "EOF"
 ╚═╝      ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝
                                                                                                                                   
 EOF
+echo "---------------------------------------------------------------------------------------------------------------------"
+echo "---------------------------------------------------------------------------------------------------------------------"
 python3 create_stack.py
 # Check if the stack was deployed successfully
 if [ $? -eq 0 ]; then
