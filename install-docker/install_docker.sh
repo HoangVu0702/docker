@@ -38,11 +38,10 @@ else
 fi
 
 read -p "Do you want to install Portainer? (y/n): " choice
-if [ "$choice" = "y" || "$choice" == "Y" ]; then
+if [ "$choice" = "y" ] || [ "$choice" = "Y" ]; then
   docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce:latest
   echo "Portainer has been installed and started!"
 else
   echo "Portainer will not be installed."
 fi
-
 exit 0
