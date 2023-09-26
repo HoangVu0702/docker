@@ -37,7 +37,8 @@ rm -rf /var/lib/docker
 rm -rf /etc/docker
 rm -rf /etc/systemd/system/docker.service.d
 rm -rf /usr/local/bin/docker-compose
-
+sudo rm /etc/apt/keyrings/docker.gpg
+sudo rm /etc/apt/sources.list.d/docker.list
 # Remove Docker GPG key and APT/YUM sources
 echo "Removing Docker GPG key and package repository..."
 if [ "$OS" == "Ubuntu" ]; then
