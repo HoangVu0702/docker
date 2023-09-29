@@ -55,12 +55,17 @@ else
   exit 1
 fi
 
-read -p "Do you want to install Portainer? (y/n): " choice
+#!/bin/bash
+read -p "Bạn có muốn cài đặt Portainer không? (y/n): " choice
 if [ "$choice" == "y" ] || [ "$choice" == "Y" ]; then
-  docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce:latest
-  echo "Portainer has been installed and started!"
+    read -p "Please enter the password : " pass
+    pass_por=$(htpasswd -nb -B admin $pass | cut -d ":" -f 2)
+    echo "PASS_POR=$pass_por" > .env
+    #docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data --admin-password $pass_por portainer/portainer-ce:latest
+    docker compose -p portainer up -d
+    echo "Portainer đã được cài đặt và khởi động!"
 else
-  echo "Portainer will not be installed."
+    echo "Portainer sẽ không được cài đặt."
 fi
 
 exit 0
