@@ -87,12 +87,10 @@ if [ "$choice" == "y" ] || [ "$choice" == "Y" ]; then
       echo "PASS_POR='$pass_por'" >> source/.env
       echo "PASS_POR_GUI=$pass" >> source/.env
   fi
-
-  # Sử dụng nohup để chạy Portainer trong nền và ẩn đầu ra và lỗi
-  docker compose -p portainer -f source/docker-compose-por.yml up -d >/dev/null 2>&1
-
   # Giả lập tiến trình cài đặt Portainer
   simulate_progress "Install Portainer" 5
+  # Sử dụng nohup để chạy Portainer trong nền và ẩn đầu ra và lỗi
+  docker compose -p portainer -f source/docker-compose-por.yml up -d >/dev/null 2>&1
 
   echo "Portainer has been installed and started!"
 else
