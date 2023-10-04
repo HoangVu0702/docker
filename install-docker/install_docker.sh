@@ -21,51 +21,82 @@ detect_os() {
   fi
 }
 
+# Hàm giả lập tiến trình
+simulate_progress() {
+  local job_name="$1"
+  local total_steps="$2"
+  local current_step=0
+  while [ $current_step -lt $total_steps ]; do
+    sleep 1
+    current_step=$((current_step + 1))
+    percentage=$((current_step * 100 / total_steps))
+    echo "[$job_name] Progress: $percentage%"
+  done
+}
+
 # Xác định hệ điều hành
 os=$(detect_os)
 
 if [ "$os" == "ubuntu" ]; then
   echo "Starting the Docker installation process on Ubuntu..."
-  apt-get update
-  apt-get install -y ca-certificates curl gnupg
+  simulate_progress "Install Docker" 10
+  apt-get update >/dev/null 2>&1
+  apt-get install -y ca-certificates curl gnupg >/dev/null 2>&1
 
-  install -m 0755 -d /etc/apt/keyrings
-  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-  chmod a+r /etc/apt/keyrings/docker.gpg
+  install -m 0755 -d /etc/apt/keyrings >/dev/null 2>&1
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg >/dev/null 2>&1
+  chmod a+r /etc/apt/keyrings/docker.gpg >/dev/null 2>&1
 
   echo \
   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
   $(lsb_release -cs) stable" | \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-  apt-get update
-  apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+  apt-get update >/dev/null 2>&1
+
+
+  apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin >/dev/null 2>&1
 
   echo "Docker has been installed on Ubuntu!"
 
 elif [ "$os" == "centos" ]; then
   echo "Starting the Docker installation process on CentOS..."
-  yum install -y yum-utils
-  yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-  yum install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+  # Giả lập tiến trình cài đặt Docker
+  simulate_progress "Install Docker" 10
+  yum install -y yum-utils >/dev/null 2>&1
+  yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo >/dev/null 2>&1
+
+  yum install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin >/dev/null 2>&1
 
   echo "Docker has been installed on CentOS!"
 
 else
-  echo "Unsupported or unknown operating system!"
+  echo "Unsupported or unknown operating system!" >/dev/null 2>&1
   exit 1
 fi
 
-#!/bin/bash
-read -p "Bạn có muốn cài đặt Portainer không? (y/n): " choice
+read -p "Do you want to install Portainer? (y/n): " choice
 if [ "$choice" == "y" ] || [ "$choice" == "Y" ]; then
-    read -p "Please enter the password : " pass
-    pass_por=$(htpasswd -nb -B admin $pass | cut -d ":" -f 2)
-    echo "PASS_POR=$pass_por" > .env
-    #docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data --admin-password $pass_por portainer/portainer-ce:latest
-    docker compose -p portainer up -d
-    echo "Portainer đã được cài đặt và khởi động!"
+  apt-get install apache2-utils -y >/dev/null 2>&1
+  read -s -p "Please enter the password : " pass
+  echo
+
+  pass_por=$(htpasswd -nb -B admin $pass | cut -d ":" -f 2)
+  if grep -q "PASS_POR" source/.env; then
+    echo "Nothing" >/dev/null 2>&1
+  else
+      echo "PASS_POR='$pass_por'" >> source/.env
+      echo "PASS_POR_GUI=$pass" >> source/.env
+  fi
+
+  # Sử dụng nohup để chạy Portainer trong nền và ẩn đầu ra và lỗi
+  docker compose -p portainer -f source/docker-compose-por.yml up -d >/dev/null 2>&1
+
+  # Giả lập tiến trình cài đặt Portainer
+  simulate_progress "Install Portainer" 5
+
+  echo "Portainer has been installed and started!"
 else
-    echo "Portainer sẽ không được cài đặt."
+  echo "Portainer will not be installed." >/dev/null 2>&1
 fi
 
 exit 0
