@@ -26,20 +26,20 @@ pip3 install python-dotenv requests
 echo "---------------------------------------------------------------------------------------------------------------------"
 echo "                                        Create file store data and config"
 echo "---------------------------------------------------------------------------------------------------------------------"
-mkdir his-cybersoc-logs-data his-cybersoc-logs-config certs his-cybersoc-kibana-data his-cybersoc-logstash-config his-cybersoc-kibana-config
-mkdir his-cybersoc-logstash-config/pipeline
-cp config/kibana/* his-cybersoc-kibana-config
-cp config/logstash/* his-cybersoc-logstash-config
-#unzip config/elasticsearch/his-cybersoc-logs-config.zip
-cp config/logstash/example.conf his-cybersoc-logstash-config/pipeline
+mkdir dude-logs-data dude-logs-config certs dude-kibana-data dude-logstash-config dude-kibana-config
+mkdir dude-logstash-config/pipeline
+cp config/kibana/* dude-kibana-config
+cp config/logstash/* dude-logstash-config
+#unzip config/elasticsearch/dude-logs-config.zip
+cp config/logstash/example.conf dude-logstash-config/pipeline
 chmod 777 -R *
 
-echo "DATA_ES=$(pwd)/his-cybersoc-logs-data" >> .env
+echo "DATA_ES=$(pwd)/dude-logs-data" >> .env
 echo "CERTS=$(pwd)/certs" >> .env
-echo "DATA_DASH=$(pwd)/his-cybersoc-kibana-data" >> .env
-echo "CONFIG_LOGSTASH=$(pwd)/his-cybersoc-logstash-config" >> .env
-echo "CONFIG_DASH=$(pwd)/his-cybersoc-kibana-config" >> .env
-echo "CONFIG_ES=$(pwd)/his-cybersoc-logs-config" >> .env
+echo "DATA_DASH=$(pwd)/dude-kibana-data" >> .env
+echo "CONFIG_LOGSTASH=$(pwd)/dude-logstash-config" >> .env
+echo "CONFIG_DASH=$(pwd)/dude-kibana-config" >> .env
+echo "CONFIG_ES=$(pwd)/dude-logs-config" >> .env
 
 echo "---------------------------------------------------------------------------------------------------------------------"
 echo "                                        Configure kernel parameters for Elasticsearch"
@@ -74,12 +74,12 @@ echo "                                        Create folder config for Elasticse
 echo "---------------------------------------------------------------------------------------------------------------------"
 # Create folder config for Elasticsearch
 docker run --name es-example -d -it docker.elastic.co/elasticsearch/elasticsearch:"$STACK_VERSION"
-docker cp es-example:/usr/share/elasticsearch/config his-cybersoc-logs-config
-#mv his-cybersoc-logs-config/config/* his-cybersoc-logs-config
+docker cp es-example:/usr/share/elasticsearch/config dude-logs-config
+#mv dude-logs-config/config/* dude-logs-config
 echo "
 cluster.name: "mini_soc-cluster"
-network.host: his-cybersoc-logs
-node.name: his-cybersoc-logs
+network.host: dude-logs
+node.name: dude-logs
 
 bootstrap.memory_lock: true
 
@@ -90,14 +90,14 @@ xpack.security.enrollment.enabled: true
 xpack.security.enabled: true
 xpack.security.http.ssl.enabled: true
 xpack.security.transport.ssl.enabled: true
-xpack.security.http.ssl.key: /usr/share/elasticsearch/config/certs/his-cybersoc-logs.key
-xpack.security.http.ssl.certificate: /usr/share/elasticsearch/config/certs/his-cybersoc-logs.crt
+xpack.security.http.ssl.key: /usr/share/elasticsearch/config/certs/dude-logs.key
+xpack.security.http.ssl.certificate: /usr/share/elasticsearch/config/certs/dude-logs.crt
 xpack.security.http.ssl.certificate_authorities: /usr/share/elasticsearch/config/certs/ca/ca.crt
 
-xpack.security.transport.ssl.key: /usr/share/elasticsearch/config/certs/his-cybersoc-logs.key
-xpack.security.transport.ssl.certificate: /usr/share/elasticsearch/config/certs/his-cybersoc-logs.crt
+xpack.security.transport.ssl.key: /usr/share/elasticsearch/config/certs/dude-logs.key
+xpack.security.transport.ssl.certificate: /usr/share/elasticsearch/config/certs/dude-logs.crt
 xpack.security.transport.ssl.certificate_authorities: /usr/share/elasticsearch/config/certs/ca/ca.crt
-" > his-cybersoc-logs-config/config/elasticsearch.yml
+" > dude-logs-config/config/elasticsearch.yml
 docker rm -f es-example
 
 # Create Network

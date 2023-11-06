@@ -1,6 +1,6 @@
-server.name: his-cybersoc-dashboard
+server.name: dude-dashboard
 server.host: "0.0.0.0"
-elasticsearch.hosts: [ "https://his-cybersoc-logs:9200" ] #### edit http
+elasticsearch.hosts: [ "https://dude-logs:9200" ] #### edit http
 
 
 #xpack.security.enabled: true
@@ -9,8 +9,8 @@ elasticsearch.hosts: [ "https://his-cybersoc-logs:9200" ] #### edit http
 elasticsearch.ssl.certificateAuthorities: "/usr/share/kibana/config/certs/ca/ca.crt"
 elasticsearch.ssl.verificationMode: certificate
 
-server.ssl.certificate: "/usr/share/kibana/config/certs/his-cybersoc-dashboard.crt"
-server.ssl.key: "/usr/share/kibana/config/certs/his-cybersoc-dashboard.key"
+server.ssl.certificate: "/usr/share/kibana/config/certs/dude-dashboard.crt"
+server.ssl.key: "/usr/share/kibana/config/certs/dude-dashboard.key"
 server.ssl.enabled: true
 xpack.encryptedSavedObjects.encryptionKey: "032fe5fa33bd4a8ec9320a1592265d24"
 
