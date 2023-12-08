@@ -42,7 +42,6 @@ progress_bar() {
 
   progress_bar+="] ($progress%)"
   echo -ne "\rProgress: $progress_bar"
-  echo -ne "\n"
 }
 
 # Biến tiến trình
@@ -64,6 +63,7 @@ if [ "$os" == "ubuntu" ]; then
   update_progress 10
   apt-get install -y ca-certificates curl gnupg > /dev/null 2>&1
   update_progress 20
+  echo -ne "\n"
 
   install -m 0755 -d /etc/apt/keyrings > /dev/null 2>&1
   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg > /dev/null 2>&1
@@ -104,6 +104,7 @@ elif [ "$os" == "debian" ]; then
   update_progress 30
   install -m 0755 -d /etc/apt/keyrings > /dev/null 2>&1
   update_progress 45
+  echo -ne "\n"
   curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg > /dev/null 2>&1
   update_progress 60
   chmod a+r /etc/apt/keyrings/docker.gpg > /dev/null 2>&1
@@ -118,6 +119,7 @@ elif [ "$os" == "debian" ]; then
   update_progress 99
   apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y > /dev/null 2>&1
   update_progress 100
+  echo -ne "\n"
 else
   echo "Unsupported or unknown operating system!"
   exit 1
