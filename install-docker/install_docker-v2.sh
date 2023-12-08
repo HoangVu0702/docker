@@ -114,6 +114,8 @@ elif [ "$os" == "debian" ]; then
     tee /etc/apt/sources.list.d/docker.list > /dev/null
   update_progress 90
   apt-get update -y > /dev/null 2>&1
+  update_progress 99
+  apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
   update_progress 100
 else
   echo "Unsupported or unknown operating system!"
