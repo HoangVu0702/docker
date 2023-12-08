@@ -13,6 +13,8 @@ if [ -f /etc/os-release ]; then
         OS="Ubuntu"
     elif [[ $ID == "centos" || $ID == "rhel" || $ID == "fedora" ]]; then
         OS="CentOS"
+    elif [[ $ID == "debian" ]]; then
+      echo "Debian"
     else
         echo "Hệ điều hành không được hỗ trợ."
         exit 1
@@ -49,6 +51,11 @@ case "$OS" in
         echo "[$job_name] Đang gỡ cài đặt Docker trên CentOS..."
         yum -y remove docker-ce docker-ce-cli containerd.io > /dev/null 2>&1
         ;;
+    Debian)
+        # Gỡ cài đặt Docker trên CentOS và ẩn thông tin chi tiết
+        echo "[$job_name] Đang gỡ cài đặt Docker trên Debian..."
+        apt-get -y purge docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-ce-rootless-extras > /dev/null 2>&1
+        ;;    
     *)
         echo "Hệ điều hành không được hỗ trợ."
         exit 1
