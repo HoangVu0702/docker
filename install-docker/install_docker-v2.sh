@@ -97,6 +97,7 @@ elif [ "$os" == "centos" ]; then
 
 elif [ "$os" == "debian" ]; then
   # Add Docker's official GPG key:
+  echo "Starting the Docker installation process on Debian..."
   apt-get update -y > /dev/null 2>&1
   update_progress 15
   apt-get install ca-certificates curl gnupg -y > /dev/null 2>&1
@@ -115,7 +116,7 @@ elif [ "$os" == "debian" ]; then
   update_progress 90
   apt-get update -y > /dev/null 2>&1
   update_progress 99
-  apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+  apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y > /dev/null 2>&1
   update_progress 100
 else
   echo "Unsupported or unknown operating system!"
