@@ -13,6 +13,8 @@ detect_os() {
       echo "ubuntu"
     elif [[ $ID == "centos" || $ID == "rhel" || $ID == "fedora" ]]; then
       echo "centos"
+    elif [[ $ID == "debian"]]; then
+      echo "debian"
     else
       echo "unknown"
     fi
@@ -93,6 +95,26 @@ elif [ "$os" == "centos" ]; then
 
   echo "Docker has been installed on CentOS!"
 
+elif [ "$os" == "debian" ]; then
+  # Add Docker's official GPG key:
+  apt-get update -y > /dev/null 2>&1
+  update_progress 15
+  apt-get install ca-certificates curl gnupg -y > /dev/null 2>&1
+  update_progress 30
+  install -m 0755 -d /etc/apt/keyrings > /dev/null 2>&1
+  update_progress 45
+  curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg > /dev/null 2>&1
+  update_progress 60
+  chmod a+r /etc/apt/keyrings/docker.gpg > /dev/null 2>&1
+  update_progress 75
+  # Add the repository to Apt sources:
+  echo \
+    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian \
+    $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+    tee /etc/apt/sources.list.d/docker.list > /dev/null
+  update_progress 90
+  apt-get update -y > /dev/null 2>&1
+  update_progress 100
 else
   echo "Unsupported or unknown operating system!"
   exit 1
