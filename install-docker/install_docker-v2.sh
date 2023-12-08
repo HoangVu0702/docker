@@ -13,7 +13,7 @@ detect_os() {
       echo "ubuntu"
     elif [[ $ID == "centos" || $ID == "rhel" || $ID == "fedora" ]]; then
       echo "centos"
-    elif [[ $ID == "debian"]]; then
+    elif [[ $ID == "debian" ]]; then
       echo "debian"
     else
       echo "unknown"
