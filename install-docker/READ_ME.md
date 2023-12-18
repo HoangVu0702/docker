@@ -1,1 +1,3 @@
-Sử dụng: sudo bash install_docker.sh Ubuntu hoặc sudo bash install_docker.sh CentOS
+Phân quyền cho file sh: chmod +x install_docker.sh
+Sử dụng: sudo bash install_docker.sh
+Fix lỗi: sed -i -e 's/\r$//' install_docker.sh
