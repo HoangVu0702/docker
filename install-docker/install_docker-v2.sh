@@ -125,6 +125,36 @@ else
   exit 1
 fi
 
-# Rest of your script...
+read -p "Do you want to install Portainer? (y/n): " choice
+if [ "$choice" == "y" ] || [ "$choice" == "Y" ]; then
+  apt-get install apache2-utils -y
+  read -p "Please enter your IP ? " IP
+  read -s -p "Please enter the password : " pass
+  #docker compose -p portainer up -d
+  docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce:latest
+  echo "Portainer has been installed and started!"
+  api_endpoint="https://$IP:9443/api"
+  timeout=60
+  while ! nc -z -w 1 "$IP" 9443; do
+      sleep 5
+      timeout=$((timeout - 5))
+      if [ "$timeout" -le 0 ]; then
+          echo "Timeout while waiting for the container to start."
+          exit 1
+      fi
+  done
+
+  # Check if an Administrator account has been created
+  admin_check_status=$(curl -I -s -o --insecure /dev/null -w "%{http_code}" "$api_endpoint/users/admin/check")
+
+  # Configure admin user password
+  echo "Configure admin user password...."
+  if [ "$admin_check_status" != "200" ] && [ "$admin_check_status" != "204" ]; then
+      curl -X POST --insecure -d "{\"Username\": \"admin\", \"Password\": \"$pass\"}" "$api_endpoint/users/admin/init"
+  fi
+  #echo "Please access to Web check credential https://ip:9443"
+else
+  echo "Portainer will not be installed."
+fi
 
 exit 0
